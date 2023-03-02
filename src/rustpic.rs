@@ -14,9 +14,8 @@ use image::{GenericImageView, Pixel};
 
 /// # Value char - average value of the color shade
 /// # Return char -  returned character based on the average value of the color shade
-pub fn get_density(value: u8) -> char {
+pub fn get_density(value: u8, density: &str) -> char {
     //! a public function that serves to determine the average value of the color and then select a symbol that depends on the shade
-    let density: &str = "@QB#NgWM8RDHdOKq9$6khEPXwmeZaoS2yjuf143sdfajasdf73170714307dczF]}";
     let mut char_value: u8 = (density.len() as c_float / 255.0 * value as c_float) as u8;
     char_value = max(char_value, 0);
 
@@ -34,18 +33,16 @@ pub fn write_to_file(chars: Vec<Vec<char>>, path: &str) -> Result<(), Error>{
 
     for i in &chars{
         write!(output, "{:?}\n", String::from_iter(i).to_string())?;
-
-
     }
-
     Ok(())
 }
 
 /// # Value path - the path to the image to be read
 /// # Value scale_height - these are the values ( an even number ) needed to crop the image n times
-/// # Value scale_width- these are the values (an even number ) needed to crop the image n times
+/// # Value scale_width - these are the values (an even number ) needed to crop the image n times
+/// # Value density - symbols used to write the image
 /// # Return the read_image function returns a two-dimensional vector with characters that will then be printed by another function ( write_to_file )
-pub fn read_image(path: &str,  scale_height: u32,  scale_width: u32) -> Vec<Vec<char>> {
+pub fn read_image(path: &str,  scale_height: u32,  scale_width: u32, density: &str) -> Vec<Vec<char>> {
     //! the public read_image function is the main one in the rustpic library,
     //! it is used to "read the image", that is, it serves to take each pixel of the image and return it
     let img = image::open(path).unwrap();
@@ -62,7 +59,7 @@ pub fn read_image(path: &str,  scale_height: u32,  scale_width: u32) -> Vec<Vec<
                     color_rbg = img.get_pixel(b * scale_width + d, a * scale_height + c).channels()[2];
                 }
             }
-            a1[a as usize][b as usize] = get_density(color_rbg);
+            a1[a as usize][b as usize] = get_density(color_rbg, density);
         }
     }
     return a1;
