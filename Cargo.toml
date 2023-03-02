@@ -1,0 +1,12 @@
+[package]
+name = "picasc"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "rustpic"
+path = "src/rustpic.rs"
+
+
+[dependencies]
+image = "0.23.14"
